@@ -18,7 +18,7 @@ public class WebCrawlerApp
 	static LinkedList<LinkNode> seen = new LinkedList<LinkNode>();
 	
 	static String seedPage = "https://en.wikipedia.org/wiki/Hugh_of_Saint-Cher";
-	static String keyPhrase = "index";
+	static String keyPhrase = "";
 	
 	static String prefix = "https://en.wikipedia.org/wiki/";
 	static String mainPage = "https://en.wikipedia.org/wiki/Main_Page";
@@ -58,14 +58,30 @@ public class WebCrawlerApp
 		{
 			LinkNode node = frontier.getFirst();
 			
-			if (node.getDepth() < maxDepth && seen.size() < threshold)
+			if (node.getDepth() <= maxDepth && seen.size() < threshold)
 			{
-				GetDocumentLinks(node);
-				
-				System.out.println("Frontier: " + frontier.size() + " Seen: " + seen.size() + " Depth: " + node.getDepth() + " Link: " + node.getLink());
-				
-				frontier.removeFirst();
-				seen.add(node);
+				if ((!keyPhrase.equals("")) && (node.getDepth() != seedDepth))
+				{
+					if (ContainsKeyPhrase(node.getLink()))
+					{
+						GetDocumentLinks(node);
+						
+						System.out.println("Frontier: " + frontier.size() + " Seen: " + seen.size() + " Depth: " + node.getDepth() + " Link: " + node.getLink());
+						
+						seen.add(node);
+					}
+					
+					frontier.removeFirst();
+				}
+				else
+				{
+					GetDocumentLinks(node);
+					
+					System.out.println("Frontier: " + frontier.size() + " Seen: " + seen.size() + " Depth: " + node.getDepth() + " Link: " + node.getLink());
+					
+					seen.add(node);
+					frontier.removeFirst();
+				}
 			}
 			else
 			{
@@ -87,14 +103,11 @@ public class WebCrawlerApp
 	}
 	
 	public static void GetDocumentLinks(LinkNode node) throws IOException, InterruptedException
-	{
-		if (frontier.size() <= threshold)
-		{
-			Document doc = Jsoup.connect(node.getLink()).get();
-			Elements links = doc.select(parseHREFNodes);
-			FilterLinks(links, node);
-			Thread.sleep(1000);
-		}
+	{	
+		Document doc = Jsoup.connect(node.getLink()).get();
+		Elements links = doc.select(parseHREFNodes);
+		FilterLinks(links, node);
+		Thread.sleep(1000);
 	}
 	
 	public static void FilterLinks(Elements links, LinkNode node)
