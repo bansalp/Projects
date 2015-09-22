@@ -39,53 +39,65 @@ public class WebCrawlerApp
 	
 	public static void main(String[] args) 
 	{
-		try 
+		LinkNode seedNode = new LinkNode(seedPage, seedDepth);
+		frontier.add(seedNode);
+		
+		while (true)
 		{
-			crawl();
-		} 
-		catch (Exception e) 
-		{
-			System.out.println(e.getMessage());
+			try 
+			{
+				crawl();
+				break;
+			} 
+			catch (Exception e) 
+			{
+				System.out.println(e.getMessage());
+			}
 		}
 	}
 	
 	public static void crawl() throws IOException, InterruptedException
 	{
-		LinkNode seedNode = new LinkNode(seedPage, seedDepth);
-		frontier.add(seedNode);
-		
 		while (!frontier.isEmpty())
 		{
-			LinkNode node = frontier.getFirst();
+			LinkNode node = frontier.removeFirst();
 			
-			if (node.getDepth() <= maxDepth && seen.size() < threshold)
+			if (!seen.contains(node))
 			{
-				if ((!keyPhrase.equals("")) && (node.getDepth() != seedDepth))
+				if (node.getDepth() <= maxDepth && seen.size() < threshold)
 				{
-					if (ContainsKeyPhrase(node.getLink()))
+					int newNodeDepth = node.getDepth() + 1;
+					
+					if ((!keyPhrase.equals("")) && (node.getDepth() != seedDepth))
 					{
-						GetDocumentLinks(node);
+						if (ContainsKeyPhrase(node.getLink()))
+						{
+							if (newNodeDepth <= maxDepth)
+							{
+								GetDocumentLinks(node, newNodeDepth);
+							}
+							
+							System.out.println("Frontier: " + frontier.size() + " Seen: " + seen.size() + " Depth: " + node.getDepth() + " Link: " + node.getLink());
+							
+							seen.add(node);
+						}
+					}
+					else
+					{
+						if (newNodeDepth <= maxDepth)
+						{
+							GetDocumentLinks(node, newNodeDepth);
+						}
 						
 						System.out.println("Frontier: " + frontier.size() + " Seen: " + seen.size() + " Depth: " + node.getDepth() + " Link: " + node.getLink());
 						
 						seen.add(node);
 					}
-					
-					frontier.removeFirst();
 				}
 				else
 				{
-					GetDocumentLinks(node);
-					
-					System.out.println("Frontier: " + frontier.size() + " Seen: " + seen.size() + " Depth: " + node.getDepth() + " Link: " + node.getLink());
-					
-					seen.add(node);
-					frontier.removeFirst();
+					break;
 				}
-			}
-			else
-			{
-				break;
 			}
 		}
 		
@@ -102,15 +114,24 @@ public class WebCrawlerApp
 		writer.close();
 	}
 	
-	public static void GetDocumentLinks(LinkNode node) throws IOException, InterruptedException
+	public static void GetDocumentLinks(LinkNode node, int newNodeDepth) throws IOException, InterruptedException
 	{	
+		//long startTime = System.currentTimeMillis();
+		
 		Document doc = Jsoup.connect(node.getLink()).get();
 		Elements links = doc.select(parseHREFNodes);
-		FilterLinks(links, node);
-		Thread.sleep(1000);
+		FilterLinks(links, node, newNodeDepth);
+		
+		//long stopTime = System.currentTimeMillis();
+		//long elapsedTime = stopTime - startTime;
+		
+		//if (elapsedTime < 1000)
+		//{
+		//	Thread.sleep(1000);
+		//}
 	}
 	
-	public static void FilterLinks(Elements links, LinkNode node)
+	public static void FilterLinks(Elements links, LinkNode node, int newNodeDepth)
 	{
 		for (Element link: links)
 		{
@@ -127,12 +148,8 @@ public class WebCrawlerApp
 				{
 					if (!IsMainPageLink(absUrl))
 					{
-						LinkNode newNode = new LinkNode(absUrl, node.getDepth() + 1);
-						
-						if ((!frontier.contains(newNode)) && (!seen.contains(newNode)))
-						{
-							frontier.add(newNode);
-						}
+						LinkNode newNode = new LinkNode(absUrl, newNodeDepth);
+						frontier.add(newNode);
 					}
 				}
 			}
