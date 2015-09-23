@@ -60,29 +60,15 @@ public class WebCrawlerApp
 	{
 		while (!frontier.isEmpty())
 		{
-			LinkNode node = frontier.removeFirst();
+			LinkNode node = frontier.getFirst();
 			
-			if (!seen.contains(node))
+			if (node.getDepth() <= maxDepth && seen.size() < threshold)
 			{
-				if (node.getDepth() <= maxDepth && seen.size() < threshold)
+				int newNodeDepth = node.getDepth() + 1;
+				
+				if ((!keyPhrase.equals("")) && (node.getDepth() != seedDepth))
 				{
-					int newNodeDepth = node.getDepth() + 1;
-					
-					if ((!keyPhrase.equals("")) && (node.getDepth() != seedDepth))
-					{
-						if (ContainsKeyPhrase(node.getLink()))
-						{
-							if (newNodeDepth <= maxDepth)
-							{
-								GetDocumentLinks(node, newNodeDepth);
-							}
-							
-							System.out.println("Frontier: " + frontier.size() + " Seen: " + seen.size() + " Depth: " + node.getDepth() + " Link: " + node.getLink());
-							
-							seen.add(node);
-						}
-					}
-					else
+					if (ContainsKeyPhrase(node.getLink()))
 					{
 						if (newNodeDepth <= maxDepth)
 						{
@@ -93,11 +79,25 @@ public class WebCrawlerApp
 						
 						seen.add(node);
 					}
+					
+					frontier.removeFirst();
 				}
 				else
 				{
-					break;
+					if (newNodeDepth <= maxDepth)
+					{
+						GetDocumentLinks(node, newNodeDepth);
+					}
+					
+					System.out.println("Frontier: " + frontier.size() + " Seen: " + seen.size() + " Depth: " + node.getDepth() + " Link: " + node.getLink());
+					
+					seen.add(node);
+					frontier.removeFirst();
 				}
+			}
+			else
+			{
+				break;
 			}
 		}
 		
@@ -149,7 +149,11 @@ public class WebCrawlerApp
 					if (!IsMainPageLink(absUrl))
 					{
 						LinkNode newNode = new LinkNode(absUrl, newNodeDepth);
-						frontier.add(newNode);
+						
+						if ((!frontier.contains(newNode)) && (!seen.contains(newNode)))
+						{
+							frontier.add(newNode);
+						}
 					}
 				}
 			}
@@ -161,19 +165,14 @@ public class WebCrawlerApp
 		Document doc = Jsoup.connect(link).get();
 		Elements elements = doc.getElementsContainingOwnText(keyPhrase);
 		
-		for (Element element: elements)
+		if (elements.size() > 0)
 		{
-			if (IsURL(element.ownText()))
-			{
-				continue;
-			}
-			else
-			{
-				return true;
-			}
+			return true;
 		}
-		
-		return false;
+		else
+		{
+			return false;
+		}
 	}
 	
 	public static Boolean IsURL(String ownText)
