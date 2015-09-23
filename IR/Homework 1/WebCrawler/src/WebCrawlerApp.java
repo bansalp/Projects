@@ -102,6 +102,7 @@ public class WebCrawlerApp
 							GetDocumentLinks(node, newNodeDepth);
 						}
 						
+						System.out.println(node.getLink());
 						result.add(node);
 					}
 				}
@@ -112,6 +113,7 @@ public class WebCrawlerApp
 						GetDocumentLinks(node, newNodeDepth);
 					}
 					
+					System.out.println(node.getLink());
 					result.add(node);
 				}
 				
