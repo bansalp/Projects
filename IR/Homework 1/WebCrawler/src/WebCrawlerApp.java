@@ -18,8 +18,8 @@ public class WebCrawlerApp
 	static LinkedList<LinkNode> seen = new LinkedList<LinkNode>();
 	static LinkedList<LinkNode> result = new LinkedList<LinkNode>();
 	
-	static String seedPage = "https://en.wikipedia.org/wiki/Hugh_of_Saint-Cher";
-	static String keyPhrase = "concordance";
+	static String seedPage = "";
+	static String keyPhrase = "";
 	
 	static String prefix = "https://en.wikipedia.org/wiki/";
 	static String mainPage = "https://en.wikipedia.org/wiki/Main_Page";
@@ -40,6 +40,30 @@ public class WebCrawlerApp
 	
 	public static void main(String[] args) 
 	{
+		try
+		{
+			if (args.length == 0)
+			{
+				throw new Exception();
+			}
+			else if (args.length == 1)
+			{
+				URL u = new URL(args[0]);
+				seedPage = args[0];
+			}
+			else if (args.length == 2)
+			{
+				URL u = new URL(args[0]);
+				seedPage = args[0];
+				keyPhrase = args[1];
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error: Illegal arguments");
+			System.exit(0);
+		}
+		
 		LinkNode seedNode = new LinkNode(seedPage, seedDepth);
 		frontier.add(seedNode);
 		
@@ -52,7 +76,7 @@ public class WebCrawlerApp
 			} 
 			catch (Exception e) 
 			{
-				System.out.println(e.getMessage());
+				System.out.println("Error: " + e.getMessage());
 			}
 		}
 	}
@@ -61,6 +85,8 @@ public class WebCrawlerApp
 	{
 		while (!frontier.isEmpty())
 		{
+			long startTime = System.currentTimeMillis();
+			
 			LinkNode node = frontier.getFirst();
 			
 			if (node.getDepth() <= maxDepth && result.size() < threshold)
@@ -76,8 +102,6 @@ public class WebCrawlerApp
 							GetDocumentLinks(node, newNodeDepth);
 						}
 						
-						System.out.println("Frontier: " + frontier.size() + " Seen: " + result.size() + " Depth: " + node.getDepth() + " Link: " + node.getLink());
-						
 						result.add(node);
 					}
 				}
@@ -88,8 +112,6 @@ public class WebCrawlerApp
 						GetDocumentLinks(node, newNodeDepth);
 					}
 					
-					System.out.println("Frontier: " + frontier.size() + " Seen: " + result.size() + " Depth: " + node.getDepth() + " Link: " + node.getLink());
-					
 					result.add(node);
 				}
 				
@@ -99,6 +121,14 @@ public class WebCrawlerApp
 			else
 			{
 				break;
+			}
+			
+			long stopTime = System.currentTimeMillis();
+			long elapsedTime = stopTime - startTime;
+			
+			if (elapsedTime < 1000)
+			{
+				Thread.sleep(1000 - elapsedTime);
 			}
 		}
 		
@@ -117,19 +147,9 @@ public class WebCrawlerApp
 	
 	public static void GetDocumentLinks(LinkNode node, int newNodeDepth) throws IOException, InterruptedException
 	{	
-		//long startTime = System.currentTimeMillis();
-		
 		Document doc = Jsoup.connect(node.getLink()).get();
 		Elements links = doc.select(parseHREFNodes);
 		FilterLinks(links, node, newNodeDepth);
-		
-		//long stopTime = System.currentTimeMillis();
-		//long elapsedTime = stopTime - startTime;
-		
-		//if (elapsedTime < 1000)
-		//{
-		//	Thread.sleep(1000);
-		//}
 	}
 	
 	public static void FilterLinks(Elements links, LinkNode node, int newNodeDepth)
