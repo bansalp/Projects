@@ -16,9 +16,10 @@ public class WebCrawlerApp
 {
 	static LinkedList<LinkNode> frontier = new LinkedList<LinkNode>();
 	static LinkedList<LinkNode> seen = new LinkedList<LinkNode>();
+	static LinkedList<LinkNode> result = new LinkedList<LinkNode>();
 	
 	static String seedPage = "https://en.wikipedia.org/wiki/Hugh_of_Saint-Cher";
-	static String keyPhrase = "";
+	static String keyPhrase = "concordance";
 	
 	static String prefix = "https://en.wikipedia.org/wiki/";
 	static String mainPage = "https://en.wikipedia.org/wiki/Main_Page";
@@ -62,7 +63,7 @@ public class WebCrawlerApp
 		{
 			LinkNode node = frontier.getFirst();
 			
-			if (node.getDepth() <= maxDepth && seen.size() < threshold)
+			if (node.getDepth() <= maxDepth && result.size() < threshold)
 			{
 				int newNodeDepth = node.getDepth() + 1;
 				
@@ -75,12 +76,10 @@ public class WebCrawlerApp
 							GetDocumentLinks(node, newNodeDepth);
 						}
 						
-						System.out.println("Frontier: " + frontier.size() + " Seen: " + seen.size() + " Depth: " + node.getDepth() + " Link: " + node.getLink());
+						System.out.println("Frontier: " + frontier.size() + " Seen: " + result.size() + " Depth: " + node.getDepth() + " Link: " + node.getLink());
 						
-						seen.add(node);
+						result.add(node);
 					}
-					
-					frontier.removeFirst();
 				}
 				else
 				{
@@ -89,11 +88,13 @@ public class WebCrawlerApp
 						GetDocumentLinks(node, newNodeDepth);
 					}
 					
-					System.out.println("Frontier: " + frontier.size() + " Seen: " + seen.size() + " Depth: " + node.getDepth() + " Link: " + node.getLink());
+					System.out.println("Frontier: " + frontier.size() + " Seen: " + result.size() + " Depth: " + node.getDepth() + " Link: " + node.getLink());
 					
-					seen.add(node);
-					frontier.removeFirst();
+					result.add(node);
 				}
+				
+				seen.add(node);
+				frontier.removeFirst();
 			}
 			else
 			{
@@ -107,7 +108,7 @@ public class WebCrawlerApp
 	public static void WriteURLsToFile() throws FileNotFoundException, UnsupportedEncodingException
 	{
 		PrintWriter writer = new PrintWriter(fileName, charSet);		
-		for (LinkNode link: seen)
+		for (LinkNode link: result)
 		{
 			writer.println(link.getLink());
 		}
@@ -163,7 +164,7 @@ public class WebCrawlerApp
 	public static Boolean ContainsKeyPhrase(String link) throws IOException
 	{
 		Document doc = Jsoup.connect(link).get();
-		Elements elements = doc.getElementsContainingOwnText(keyPhrase);
+		Elements elements = doc.getElementsContainingText(keyPhrase);
 		
 		if (elements.size() > 0)
 		{
@@ -173,20 +174,6 @@ public class WebCrawlerApp
 		{
 			return false;
 		}
-	}
-	
-	public static Boolean IsURL(String ownText)
-	{
-		try
-		{
-			URL u = new URL(ownText);
-		}
-		catch(Exception e)
-		{
-			return false;
-		}
-		
-		return true;
 	}
 
 	public static Boolean IsEnglishPrefixLink(String link)
