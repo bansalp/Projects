@@ -13,5 +13,7 @@ java -cp ./WebCrawler/lib/*:./WebCrawler/src/ WebCrawlerApp [seed page] [optiona
 
 
 
+The program will print the links encountered on the console. The list of links will also be written to a file ‘URLs.txt’ at ./WebCrawler folder location.
+
 Out of the 24120 pages crawled only 501 pages were retrieved by the focused crawler for 'concordance' including the seed page. This indicates that only 2.08% of the pages crawled contained the keyphrase. 
 
