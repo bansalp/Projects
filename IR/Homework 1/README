@@ -1,19 +1,43 @@
 How to compile?
 
 Execute the following commands in order:
-make clean
-make
+make clean	[This command is used to clean previously generated .class files.]
 
+make		[This command is used to compile and generate .class files 
+			for the project.]
 
+-------------------------------------------------------------------------------
 
 How to run?
 
 Execute the following command:
-java -cp ./WebCrawler/lib/*:./WebCrawler/src/ WebCrawlerApp [seed page] [optional keyphrase]
+java -cp ./WebCrawler/lib/*:./WebCrawler/src/ WebCrawlerApp <seed_page> [keyphrase]
 
+Note:
+seed_page is a required command-line argument.
+keyphrase is an optional command-line argument.
 
+-------------------------------------------------------------------------------
 
-The program will print the links encountered on the console. The list of links will also be written to a file ‘URLs.txt’ created at current working directory location.
+Output:
 
-Out of the 24120 pages crawled only 501 pages were retrieved by the focused crawler for 'concordance' including the seed page. This indicates that only 2.08% of the pages crawled contained the keyphrase. 
+The program will print the relevant links crawled on to the console. The list of links 
+will also be written to a file ‘URLs.txt’ created at current working directory location.
 
+-------------------------------------------------------------------------------
+
+Proportion retrieved:
+
+Out of the 24120 pages crawled only 501 pages were retrieved by the focused crawler 
+for 'concordance' including the seed page. This indicates that only 2.08% of the pages 
+crawled contained the keyphrase. 
+
+-------------------------------------------------------------------------------
+
+Example:
+
+Unfocused crawling:
+java -cp ./WebCrawler/lib/*:./WebCrawler/src/ WebCrawlerApp https://en.wikipedia.org/wiki/Hugh_of_Saint-Cher
+
+Focused crawling:
+java -cp ./WebCrawler/lib/*:./WebCrawler/src/ WebCrawlerApp https://en.wikipedia.org/wiki/Hugh_of_Saint-Cher concordance
