@@ -53,6 +53,7 @@
 **/*.bak
 **/*.swp
 **/*~.nib
+!**/lib/
 **/local.properties
 **/.classpath
 **/.settings/
