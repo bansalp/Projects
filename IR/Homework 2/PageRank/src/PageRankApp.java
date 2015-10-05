@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,7 +9,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class PageRankApp {
-	static String inlinks_file = Paths.get(".").toAbsolutePath().normalize().toString() + "/src/inlinks_file.txt";
+	static String inlinks_file = Paths.get(".").toAbsolutePath().normalize().toString() + "/src/wt2g_inlinks.txt";
 
 	static HashSet<String> all_nodes = new HashSet<String>();
 	static HashSet<String> sink_nodes = new HashSet<String>();
@@ -20,22 +21,25 @@ public class PageRankApp {
 
 	public static void main(String[] args) {
 		try {
+			PrintWriter writer = new PrintWriter("output.txt", "UTF-8");
+			
 			BufferedReader br = new BufferedReader(new FileReader(inlinks_file));
 			String str;
 
 			while ((str = br.readLine()) != null) {
 				String[] nodes = str.split(whitespace);
 				String newKey = nodes[0];
+				int flag = 0;
 
 				if (!mapping.containsKey(newKey)) {
-					mapping.put(newKey, new HashSet<String>());
+					flag++;
 				}
 
 				if (!all_nodes.contains(newKey)) {
 					all_nodes.add(newKey);
 				}
 
-				HashSet<String> temp = mapping.get(newKey);
+				HashSet<String> temp = new HashSet<String>();
 
 				for (int i = 1; i < nodes.length; i++) {
 					if ((!temp.contains(nodes[i])) && (!(nodes[i].equalsIgnoreCase(newKey)))) {
@@ -47,33 +51,45 @@ public class PageRankApp {
 							outlinks.put(nodes[i], outlinks.get(nodes[i]) + 1);
 						}
 
-						if (!all_nodes.contains(newKey)) {
-							all_nodes.add(newKey);
+						if (!all_nodes.contains(nodes[i])) {
+							all_nodes.add(nodes[i]);
 						}
 					}
 				}
 
-				mapping.put(newKey, temp);
+				if (temp.size() != 0 && flag > 0)
+				{
+					mapping.put(newKey, temp);
+				}
 			}
 
 			System.out.println("Set of pages that link to page p");
+			writer.println("Set of pages that link to page p");
 			for (Map.Entry<String, HashSet<String>> entry : mapping.entrySet()) {
 				System.out.println(entry.getKey() + ": " + entry.getValue());
+				writer.println(entry.getKey() + ": " + entry.getValue());
 			}
 
 			System.out.println();
+			writer.println();
 
 			System.out.println("Number of out-links from page q");
+			writer.println("Number of out-links from page q");
 			for (Map.Entry<String, Integer> entry : outlinks.entrySet()) {
 				System.out.println(entry.getKey() + ": " + entry.getValue());
+				writer.println(entry.getKey() + ": " + entry.getValue());
 			}
 
 			System.out.println();
+			writer.println();
 
 			System.out.println("All Nodes");
+			writer.println("All Nodes");
 			Iterator<String> iterator = all_nodes.iterator();
 			while (iterator.hasNext()) {
-				System.out.println(iterator.next());
+				String node = iterator.next();
+				System.out.println(node);
+				writer.println(node);
 			}
 			
 			iterator = all_nodes.iterator();
@@ -87,13 +103,19 @@ public class PageRankApp {
 			}
 			
 			System.out.println();
+			writer.println();
 			
 			System.out.println("Sink Nodes");
+			writer.println("Sink Nodes");
 			iterator = sink_nodes.iterator();
 			while (iterator.hasNext())
 			{
-				System.out.println(iterator.next());
+				String node = iterator.next();
+				System.out.println(node);
+				writer.println(node);
 			}
+			
+			writer.close();
 		} catch (IOException e) {
 			System.out.println("Error: " + e.getMessage());
 		}
