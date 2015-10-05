@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class PageRankApp {
-	static String inlinks_file = Paths.get(".").toAbsolutePath().normalize().toString() + "/src/wt2g_inlinks.txt";
+	static String inlinks_file = Paths.get(".").toAbsolutePath().normalize().toString() + "/src/inlinks_file.txt";
 
 	static HashSet<String> all_nodes = new HashSet<String>();
 	static HashSet<String> sink_nodes = new HashSet<String>();
@@ -29,17 +29,17 @@ public class PageRankApp {
 			while ((str = br.readLine()) != null) {
 				String[] nodes = str.split(whitespace);
 				String newKey = nodes[0];
-				int flag = 0;
+				HashSet<String> temp;
 
 				if (!mapping.containsKey(newKey)) {
-					flag++;
+					temp = new HashSet<String>();
+				}
+				else
+				{
+					temp = mapping.get(newKey);
 				}
 
-				if (!all_nodes.contains(newKey)) {
-					all_nodes.add(newKey);
-				}
-
-				HashSet<String> temp = new HashSet<String>();
+				all_nodes.add(newKey);
 
 				for (int i = 1; i < nodes.length; i++) {
 					if ((!temp.contains(nodes[i])) && (!(nodes[i].equalsIgnoreCase(newKey)))) {
@@ -51,13 +51,11 @@ public class PageRankApp {
 							outlinks.put(nodes[i], outlinks.get(nodes[i]) + 1);
 						}
 
-						if (!all_nodes.contains(nodes[i])) {
-							all_nodes.add(nodes[i]);
-						}
+						all_nodes.add(nodes[i]);
 					}
 				}
 
-				if (temp.size() != 0 && flag > 0)
+				if (temp.size() != 0)
 				{
 					mapping.put(newKey, temp);
 				}
