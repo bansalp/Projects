@@ -38,6 +38,8 @@ public class PageRankApp {
 			
 			initializeValues();
 			
+			int counter = 0;
+			
 			do 
 			{
 				double sinkPR = totalSinkPR();
@@ -63,12 +65,15 @@ public class PageRankApp {
 					entry.setValue(newPR);
 				}
 				
+				System.out.println("Iteration: " + ++counter);
+				
 				for (Map.Entry<String, Double> entry : all_nodes.entrySet())
 				{
-					System.out.println(entry.getKey() + ":" + entry.getValue() + " ");
+					System.out.print(entry.getKey() + ":" + entry.getValue() + " ");
 				}
 				
 				System.out.println();
+				System.out.println("---------------------------------------------------------------------------");
 			}
 			while (hasConverged());
 			
