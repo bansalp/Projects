@@ -18,7 +18,7 @@ public class PageRankApp {
 
 	static String whitespace = " ";
 	
-	static double prev_perplexity = 0.0;
+	static double[] prev_perplexity = new double[] {0.0, 0.0, 0.0, 0.0};
 	static double cur_perplexity = 0.0;
 	static double damping_factor = 0.85;
 
@@ -221,9 +221,28 @@ public class PageRankApp {
 	
 	public static boolean hasConverged()
 	{
-		prev_perplexity = cur_perplexity;
+		for (int i = prev_perplexity.length - 1; i > 0; i--)
+		{
+			prev_perplexity[i] = prev_perplexity[i-1];
+		}
+		
+		prev_perplexity[0] = cur_perplexity;
 		cur_perplexity = perplexity();
 		
-		return (Math.abs(prev_perplexity - cur_perplexity) < 1.0 ? false : true);
+		boolean result = false;
+		
+		for (int i = 0; i < prev_perplexity.length; i++)
+		{
+			if (Math.abs(prev_perplexity[i] - cur_perplexity) < 1.0)
+			{
+				result = result || false;
+			}
+			else
+			{
+				result = result || true;
+			}
+		}
+		
+		return result;
 	}
 }
