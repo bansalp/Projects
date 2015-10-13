@@ -2,13 +2,20 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class PageRankApp {
-	static String inlinks_file = Paths.get(".").toAbsolutePath().normalize().toString() + "/src/inlinks_file.txt";
+	static String inlinks_file = Paths.get(".").toAbsolutePath().normalize().toString() + "/src/wt2g_inlinks.txt";
 
 	static HashMap<String, Double> all_nodes = new HashMap<String, Double>();
 	static HashSet<String> sink_nodes = new HashSet<String>();
@@ -65,18 +72,39 @@ public class PageRankApp {
 					entry.setValue(newPR);
 				}
 				
-				System.out.println("Iteration: " + ++counter);
+				//System.out.print("Iteration " + ++counter + ": ");
 				
-				for (Map.Entry<String, Double> entry : all_nodes.entrySet())
-				{
-					System.out.print(entry.getKey() + ":" + entry.getValue() + " ");
-				}
+				//for (Map.Entry<String, Double> entry : all_nodes.entrySet())
+				//{
+				//	System.out.println(entry.getKey() + ": " + entry.getValue() + " ");
+				//}
 				
-				System.out.println();
-				System.out.println("---------------------------------------------------------------------------");
+				//System.out.println();
+				//System.out.println("---------------------------------------------------------------------------");
 			}
 			while (hasConverged());
 			
+			List<Map.Entry<String, Double>> list = new LinkedList<Map.Entry<String, Double>>( all_nodes.entrySet() );
+			Collections.sort(list, new Comparator<Map.Entry<String, Double>>() 
+			{
+				public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2)
+				{
+					return (o1.getValue()).compareTo( o2.getValue() );
+				}
+			});
+			
+			Map<String, Double> result = new LinkedHashMap<String, Double>();
+	        for (Map.Entry<String, Double> entry : list)
+	        {
+	        	result.put(entry.getKey(), entry.getValue());
+	            //System.out.println(entry.getKey() + ": "+ entry.getValue());
+	        }
+	        
+	        ArrayList<String> keys = new ArrayList<String>(result.keySet());
+	        for (int i = keys.size() - 1; i >= keys.size() - 50; i--)
+	        {
+	        	System.out.println(keys.get(i) + ": " + result.get(keys.get(i)));
+	        }
 			
 			/*PrintWriter writer = new PrintWriter("output.txt", "UTF-8");
 
@@ -228,6 +256,7 @@ public class PageRankApp {
 		
 		prev_perplexity[0] = cur_perplexity;
 		cur_perplexity = perplexity();
+		//System.out.println(cur_perplexity);
 		
 		boolean result = false;
 		
