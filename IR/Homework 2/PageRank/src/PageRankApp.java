@@ -18,6 +18,7 @@ public class PageRankApp {
 	static String inlinks_file = Paths.get(".").toAbsolutePath().normalize().toString() + "/src/wt2g_inlinks.txt";
 
 	static HashMap<String, Double> all_nodes = new HashMap<String, Double>();
+	static HashMap<String, Double> all_nodes_copy = new HashMap<String, Double>();
 	static HashSet<String> sink_nodes = new HashSet<String>();
 
 	static HashMap<String, HashSet<String>> mapping = new HashMap<String, HashSet<String>>();
@@ -69,10 +70,13 @@ public class PageRankApp {
 						}
 					}
 					
-					entry.setValue(newPR);
+					all_nodes_copy.put(entry.getKey(), newPR);
+					//entry.setValue(newPR);
 				}
 				
-				//System.out.print("Iteration " + ++counter + ": ");
+				all_nodes = (HashMap<String, Double>) all_nodes_copy.clone();
+				
+				//System.out.println("Iteration " + ++counter + ": ");
 				
 				//for (Map.Entry<String, Double> entry : all_nodes.entrySet())
 				//{
@@ -84,7 +88,7 @@ public class PageRankApp {
 			}
 			while (hasConverged());
 			
-			List<Map.Entry<String, Double>> list = new LinkedList<Map.Entry<String, Double>>( all_nodes.entrySet() );
+			/*List<Map.Entry<String, Double>> list = new LinkedList<Map.Entry<String, Double>>( all_nodes.entrySet() );
 			Collections.sort(list, new Comparator<Map.Entry<String, Double>>() 
 			{
 				public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2)
@@ -104,7 +108,7 @@ public class PageRankApp {
 	        for (int i = keys.size() - 1; i >= keys.size() - 50; i--)
 	        {
 	        	System.out.println(keys.get(i) + ": " + result.get(keys.get(i)));
-	        }
+	        }*/
 			
 			/*PrintWriter writer = new PrintWriter("output.txt", "UTF-8");
 
