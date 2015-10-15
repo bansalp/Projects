@@ -12,7 +12,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class PageRankApp {
 	static String inlinks_file = Paths.get(".").toAbsolutePath().normalize().toString() + "/src/wt2g_inlinks.txt";
@@ -76,7 +75,9 @@ public class PageRankApp {
 				
 				all_nodes = (HashMap<String, Double>) all_nodes_copy.clone();
 				
-				//System.out.println("Iteration " + ++counter + ": ");
+				//System.out.print("Iteration " + ++counter + ": ");
+				
+				//counter++;
 				
 				//for (Map.Entry<String, Double> entry : all_nodes.entrySet())
 				//{
@@ -88,7 +89,7 @@ public class PageRankApp {
 			}
 			while (hasConverged());
 			
-			/*List<Map.Entry<String, Double>> list = new LinkedList<Map.Entry<String, Double>>( all_nodes.entrySet() );
+			/*List<Map.Entry<String, Double>> list = new LinkedList<Map.Entry<String, Double>>(all_nodes.entrySet());
 			Collections.sort(list, new Comparator<Map.Entry<String, Double>>() 
 			{
 				public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2)
@@ -110,6 +111,63 @@ public class PageRankApp {
 	        	System.out.println(keys.get(i) + ": " + result.get(keys.get(i)));
 	        }*/
 			
+			/*Map<String, Integer> temp = new HashMap<String, Integer>();
+			for (Map.Entry<String, HashSet<String>> entry: mapping.entrySet())
+			{
+				int num = entry.getValue().size();
+				temp.put(entry.getKey(), num);
+			}
+			
+			List<Map.Entry<String, Integer>> list = new LinkedList<Map.Entry<String, Integer>>(temp.entrySet());
+			Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() 
+			{
+				public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2)
+				{
+					return (o1.getValue()).compareTo(o2.getValue());
+				}
+			});
+			
+			Map<String, Integer> result = new LinkedHashMap<String, Integer>();
+	        for (Map.Entry<String, Integer> entry : list)
+	        {
+	        	if (entry.getValue() == 0)
+	        	{
+	        		result.put(entry.getKey(), entry.getValue());
+	        	}
+	            //System.out.println(entry.getKey() + ": "+ entry.getValue());
+	        }*/
+	        			
+	        //ArrayList<String> keys = new ArrayList<String>(result.keySet());
+	        //for (int i = keys.size() - 1; i >= keys.size() - 50; i--)
+	        //{
+	        //	System.out.println(keys.get(i) + ": " + result.get(keys.get(i)));
+	        //}
+	        
+	        /*String a = Long.toString(all_nodes.size());
+        	System.out.println("All pages: " + all_nodes.size());
+        	
+        	for (Map.Entry<String, Integer> entry: outlinks.entrySet())
+        	{
+        		all_nodes.remove(entry.getKey());
+        	}
+        	
+        	System.out.println("Pages with no out-links (sinks): " + all_nodes.size());
+        	System.out.println("Proportion: " + (all_nodes.size()/Double.parseDouble(a)));*/
+	        
+	        /*double t = 1.0/all_nodes.size();
+	        int c = 0;
+	        for (Map.Entry<String, Double> entry: all_nodes.entrySet())
+	        {
+	        	if (entry.getValue() < t)
+	        	{
+	        		c++;
+	        	}
+	        }
+	        
+	        System.out.println("All pages: " + all_nodes.size());
+	        System.out.println("Pages whose PageRank is less than their initial, uniform values: " + c);
+	        System.out.println("Proportion: " + ((double) c/all_nodes.size()));*/
+	        
 			/*PrintWriter writer = new PrintWriter("output.txt", "UTF-8");
 
 			System.out.println("Set of pages that link to page p");
