@@ -1,15 +1,21 @@
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class PageRankApp 
 {
-	static String inlinks_file = Paths.get(".").toAbsolutePath().normalize().toString() + "/src/wt2g_inlinks.txt";
+	static File inlinks_file = null;
+	static String outputFile = "output.txt";
+	static String charSet = "UTF-8";
 
 	static HashMap<String, Double> all_nodes = new HashMap<String, Double>();
 	static HashMap<String, Double> all_nodes_copy = new HashMap<String, Double>();
@@ -26,6 +32,23 @@ public class PageRankApp
 
 	public static void main(String[] args) 
 	{
+		try
+		{
+			if (args.length == 0)
+			{
+				throw new Exception();
+			}
+			else if (args.length == 1)
+			{
+				inlinks_file = new File(args[0]);
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error: Illegal arguments");
+			System.exit(0);
+		}
+		
 		try 
 		{
 			loadFileInMemory();
@@ -69,11 +92,29 @@ public class PageRankApp
 				all_nodes = (HashMap<String, Double>) all_nodes_copy.clone();
 			} 
 			while (hasConverged());
+			
+			Map<String, Double> map = new TreeMap<String, Double>();
+			for (Map.Entry<String, Double> entry: all_nodes.entrySet())
+			{
+				map.put(entry.getKey(), entry.getValue());
+			}
+			
+			WriteToFile(map);
 		} 
 		catch (Exception e) 
 		{
 			System.out.println("Error: " + e.getMessage());
 		}
+	}
+	
+	public static void WriteToFile(Map<String, Double> map) throws FileNotFoundException, UnsupportedEncodingException
+	{
+		PrintWriter writer = new PrintWriter(outputFile, charSet);		
+		for (Map.Entry<String, Double> entry: map.entrySet())
+		{
+			writer.println(entry.getKey() + ": " + entry.getValue());
+		}
+		writer.close();
 	}
 
 	public static void loadFileInMemory() throws IOException 
