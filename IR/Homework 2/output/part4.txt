@@ -1,0 +1,31 @@
+Top 10 pages by PageRank are as below:
+
+WT21-B37-76: 0.0027441513008287797
+WT21-B37-75: 0.0015614557987825674
+WT23-B39-340: 0.0012667418352184448
+WT24-B40-171: 0.001265365103260604
+WT13-B06-273: 0.001255278656796457
+WT08-B18-400: 0.0011709374304476152
+WT01-B18-225: 9.755006101544016E-4
+WT04-B27-720: 9.582903204699493E-4
+WT23-B37-134: 9.455479009444169E-4
+WT23-B19-156: 8.402617504693742E-4
+
+Top 10 pages by in-link count are as below:
+
+WT21-B37-76: 2568
+WT21-B37-75: 1704
+WT01-B18-225: 1137
+WT08-B19-222: 1041
+WT08-B18-400: 990
+WT21-B40-447: 779
+WT27-B34-57: 630
+WT27-B32-30: 628
+WT25-B15-307: 605
+WT27-B28-203: 589
+
+Statistics above indicate that a node in the graph that has fairly high in-link count may not necessarily have a high PageRank value. This shows that in-link count and PageRank value for a given node in the graph do not follow direct relationship. 
+
+We can speculate from the title of the pages with high PageRank values that these may be a home page for any website or can be a copyright, a general disclaimer or an important information page. These are the pages that may be linked to each and every page specific to a particular website. For e.g.: ‘The Economist: Copyright Notice’, ‘General Disclaimer’ and ‘Important Information’ pages have an in-link to ’Home page of the Economist’.
+
+No. Not all the documents are the ones that the user may want to see in response to an appropriate query. For e.g.: When a user plugs in ‘The Economist Home page’; he would probably want to see ‘Home page of the Economist’ and not ‘The Economist: Copyright Notice’ or ‘General Disclaimer’.
