@@ -1,0 +1,37 @@
+How to compile?
+
+Execute the following commands in order:
+make clean	[This command is used to clean previously generated .class files.]
+
+make		[This command is used to compile and generate .class files 
+		for the project.]
+
+-------------------------------------------------------------------------------
+
+How to run?
+
+Execute the following command:
+java -cp :./PageRank/src/ PageRankApp <in_link_format_file>
+
+Note:
+in_link_format_file is a required command-line argument.
+
+-------------------------------------------------------------------------------
+
+Output:
+
+The list of page IDs and their PageRank values will be written to a file ‘output.txt’ 
+created at current working directory location.
+
+There is a folder named ‘output’ which has the ‘Please hand in’s for part1, part2,
+part3 and part4 of the problem set namely part1.txt, part2.txt, part3.txt and part4.txt.
+
+-------------------------------------------------------------------------------
+
+Example:
+
+Six-node sample:
+java -cp :./PageRank/src/ PageRankApp six-node_example.txt
+
+WT2g collection sample:
+java -cp :./PageRank/src/ PageRankApp wt2g_inlinks_file.txt

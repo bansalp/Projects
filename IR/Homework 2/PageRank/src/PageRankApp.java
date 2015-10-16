@@ -89,7 +89,7 @@ public class PageRankApp
 					all_nodes_copy.put(entry.getKey(), newPR);
 				}
 
-				all_nodes = (HashMap<String, Double>) all_nodes_copy.clone();
+				all_nodes = all_nodes_copy;
 			} 
 			while (hasConverged());
 			
