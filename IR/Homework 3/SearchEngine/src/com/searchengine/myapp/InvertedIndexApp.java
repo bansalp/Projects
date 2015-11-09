@@ -1,9 +1,9 @@
 package com.searchengine.myapp;
 
-public final class SearchEngineApp {
+public final class InvertedIndexApp {
 	private final static int TWO = 2;
 
-	private SearchEngineApp() {
+	private InvertedIndexApp() {
 	}
 
 	public static void main(final String[] args) {
