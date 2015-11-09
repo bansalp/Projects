@@ -13,15 +13,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 public class BM25Calculator 
 {
 	private String invertedIndexFileName;
 	private String queriesFileName;
 	private long maxDocumentResults;
-	private String outputFileName;
 	
 	private Map<String, Map<Integer, Long>> invertedIndex;
 	// private static Map<Integer, Long> termFrequency;
@@ -38,6 +35,8 @@ public class BM25Calculator
 	private String space;
 	private String digitsPattern;
 	
+	private String systemName;
+	
 	public BM25Calculator()
 	{
 		queries = new ArrayList<String>();
@@ -48,6 +47,8 @@ public class BM25Calculator
 		
 		space = " ";
 		digitsPattern = "[0-9]+";
+		
+		systemName = "BANSAL-P";
 	}
 	
 	public String getInvertedIndexFileName() 
@@ -78,16 +79,6 @@ public class BM25Calculator
 	public void setMaxDocumentResults(long maxDocumentResults) 
 	{
 		this.maxDocumentResults = maxDocumentResults;
-	}
-
-	public String getOutputFileName() 
-	{
-		return outputFileName;
-	}
-	
-	public void setOutputFileName(String outputFileName) 
-	{
-		this.outputFileName = outputFileName;
 	}
 	
 	public void calculate() throws ClassNotFoundException, IOException
@@ -153,8 +144,12 @@ public class BM25Calculator
 	
 	private void calculateScores()
 	{		
+		int queryId = 1;
+		
 		for (String query: queries)
 		{	
+			int rank = 1;
+			
 			Map<Integer, Double> score = new HashMap<Integer, Double>();
 			
 			//System.out.println(query);
@@ -172,9 +167,22 @@ public class BM25Calculator
 			}
 
 			score = sortScoreDescending(score);
-			System.out.println(score);
 			
-			break;
+			for (Map.Entry<Integer, Double> entry: score.entrySet())
+			{
+				if (rank <= maxDocumentResults)
+				{
+					System.out.println(queryId + " Q0 " + entry.getKey() + " " + rank + " " + entry.getValue() + " " + systemName);
+					rank++;
+				}
+				else
+				{
+					System.out.println();
+					break;
+				}
+			}
+			
+			queryId++;
 		}
 	}
 	
@@ -219,7 +227,7 @@ public class BM25Calculator
 			
 			if (score.containsKey(document.getKey()))
 			{
-				score.put(document.getKey(), document.getValue() + scr);
+				score.put(document.getKey(), score.get(document.getKey()) + scr);
 			}
 			else
 			{
