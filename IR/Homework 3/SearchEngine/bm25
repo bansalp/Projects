@@ -1,0 +1,3 @@
+#!/bin/bash
+
+java -cp ./bin com.searchengine.myapp.BM25CalculatorApp $1 $2 $3

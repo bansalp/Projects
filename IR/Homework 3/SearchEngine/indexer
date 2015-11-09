@@ -1,0 +1,3 @@
+#!/bin/bash
+
+java -cp ./bin com.searchengine.myapp.InvertedIndexApp $1 $2

@@ -1,0 +1,57 @@
+How to compile?
+
+Execute the following commands in order:
+1. cd SearchEngine/ [This command is used to set present working directory to SearchEngine folder]
+2. ant clean [This command is used to clean previously generated .class files]
+3. ant build [This command is used to compile and generate .class files for the project]
+
+-------------------------------------------------------------------------------
+
+How to give executable permissions to files?
+
+Execute the following commands in order:
+1. chmod +x indexer [This command is used to give executable permissions to indexer file]
+2. chmod +x bm25 [This command is used to give executable permissions to bm25 file]
+
+-------------------------------------------------------------------------------
+
+How to run?
+
+Execute the following commands in order:
+1. ./indexer <tccorpus.txt_file_location> <index.out_file_location> [This command is used create an inverted index and output it to index.out file]
+2. ./bm25 <index.out_file_location> <queries.txt_file_location> <max_number_of_document_results> [This command is used to return documents on the standard output i.e. on the console]
+OR
+2. ./bm25 <index.out_file_location> <queries.txt_file_location> <max_number_of_document_results> > <output_file_location> [This command is used to return documents to the output file]
+
+Note:
+tccorpus.txt_file_location, index.out_file_location, queries.txt_file_location, max_number_of_document_results and output_file_location are required command-line arguments depending upon the version of the command used.
+WHERE:
+tccorpus.txt_file_location - file that contains already stemmed document collection
+index.out_file_location - simple inverted index
+queries.txt_file_location - query file
+max_number_of_document_results - maximum number of document results to be retrieved
+output_file_location - redirect standard output to file
+
+-------------------------------------------------------------------------------
+
+Example:
+
+Execute the following commands in order:
+
+1. cd SearchEngine/
+2. ant clean
+3. ant build
+4. chmod +x indexer
+5. chmod +x bm25
+6. ./indexer ./src/tccorpus/tccorpus.txt ./src/tccorpus/index.out
+7. ./bm25 ./src/tccorpus/index.out ./src/tccorpus/queries.txt 100 > ./src/tccorpus/results.eval
+8. cat ./src/tccorpus/results.eval
+
+-------------------------------------------------------------------------------
+
+Report:
+
+The project is divided into the following two steps:
+1. Build inverted index
+2. Implement BM25 ranking algorithm
+In the first step of the project, a simple inverted index is formed after reading the corpus and the inverted index is then written to an output file i.e. index.out which can be used in the second part of the project. Inverted index object which contains the term frequencies is serialised and written to the file which is not human-readable. The second part of the project returns a ranked list of documents after running the BM25 algorithm. In the first step it reads the inverted index from the index.out file and loads the inverted index into memory. This inverted index is then used to calculate the BM25 ranking for each document. The ranked list of documents is returned to the standard output.

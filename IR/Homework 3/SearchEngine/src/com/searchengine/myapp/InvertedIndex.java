@@ -82,22 +82,15 @@ public class InvertedIndex {
 				}
 			}
 		}
-		
+
 		writeOutputToFile();
 	}
-	
-	private void writeOutputToFile() throws IOException, ClassNotFoundException
-	{
+
+	private void writeOutputToFile() throws IOException, ClassNotFoundException {
 		FileOutputStream fos = new FileOutputStream(outputFileName);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(invertedIndex);
-        oos.writeObject(numberOfTokens);
-        oos.close();
-        
-        /*FileInputStream fis = new FileInputStream(outputFileName);
-        ObjectInputStream ois = new ObjectInputStream(fis);
-        Map<String, Map<Integer, Long>> invertedIndexMap = (Map<String, Map<Integer, Long>>) ois.readObject();
-        Map<Integer, Long> numberOfTokensMap = (Map<Integer, Long>) ois.readObject();
-        ois.close();*/	
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		oos.writeObject(invertedIndex);
+		oos.writeObject(numberOfTokens);
+		oos.close();
 	}
 }

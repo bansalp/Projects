@@ -23,6 +23,8 @@
     </target>
     <target name="clean">
         <delete dir="bin"/>
+    	<delete file="./src/tccorpus/index.out"/>
+    	<delete file="./src/tccorpus/results.eval"/>
     </target>
     <target depends="clean" name="cleanall"/>
     <target depends="build-subprojects,build-project" name="build"/>
