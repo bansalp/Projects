@@ -55,3 +55,9 @@ The project is divided into the following two steps:
 1. Build inverted index
 2. Implement BM25 ranking algorithm
 In the first step of the project, a simple inverted index is formed after reading the corpus and the inverted index is then written to an output file i.e. index.out which can be used in the second part of the project. Inverted index object which contains the term frequencies is serialised and written to the file which is not human-readable. The second part of the project returns a ranked list of documents after running the BM25 algorithm. In the first step it reads the inverted index from the index.out file and loads the inverted index into memory. This inverted index is then used to calculate the BM25 ranking for each document. The ranked list of documents is returned to the standard output.
+
+-------------------------------------------------------------------------------
+
+Output:
+
+output folder contains the index.out and results.eval files.
