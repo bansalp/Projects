@@ -81,8 +81,8 @@ public class LuceneApp
 			    }
 			}
 			
-			Map<String, Long> allTerms = searchEngine.getTermFrequencyForAllTerms();
-			searchEngine.WriteToFile(allTerms);
+			//Map<String, Long> allTerms = searchEngine.getTermFrequencyForAllTerms();
+			//searchEngine.WriteToFile(allTerms);
 		}
 		catch (Exception e)
 		{
