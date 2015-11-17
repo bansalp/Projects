@@ -58,7 +58,7 @@ public class LuceneApp
 			    		break;
 			    	}
 			    	
-			    	TopDocs topDocs = searchEngine.performSearch(s, 3);
+			    	TopDocs topDocs = searchEngine.performSearch(s, 100);
 			    	ScoreDoc[] hits = topDocs.scoreDocs;
 
 			    	System.out.println("Found " + hits.length + " hits.");
