@@ -79,7 +79,7 @@ public class LuceneApp
 			    }
 			    catch (Exception e)
 			    {
-			    	System.out.println("Your query contains only HTML tags. Please try again!");
+			    	System.out.println("Please enter a query or your query contains only HTML tags. Please try again!");
 			    }
 			}
 			
