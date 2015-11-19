@@ -2,7 +2,6 @@ package com.lucene.myapp;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Map;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;

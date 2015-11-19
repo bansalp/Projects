@@ -1,8 +1,10 @@
 package com.lucene.myapp;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -15,6 +17,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.jsoup.Jsoup;
 
 public class Indexer 
 {
@@ -43,7 +46,18 @@ public class Indexer
 		    {
 		    	Document doc = new Document();
 		    	fr = new FileReader(f);
-		    	doc.add(new TextField("contents", fr));
+		    	BufferedReader br = new BufferedReader(fr);
+		    	String line = null;
+		    	StringBuilder sb = new StringBuilder();
+		    	
+		    	while ((line = br.readLine()) != null) 
+		    	{
+		    		org.jsoup.nodes.Document jDoc = Jsoup.parse(line);
+		    		sb.append(jDoc.text());
+		    		sb.append("\n");
+		    	}
+		    	
+		    	doc.add(new TextField("contents", new StringReader(sb.toString())));
 		    	doc.add(new StringField("path", f.getPath(), Field.Store.YES));
 		    	doc.add(new StringField("filename", f.getName(), Field.Store.YES));
 		    	writer.addDocument(doc);
