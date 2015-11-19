@@ -1,0 +1,40 @@
+How to compile?
+
+Execute the following commands in order:
+1. cd Lucene/ [This command is used to set present working directory to Lucene folder]
+2. ant clean [This command is used to clean previously generated .class files]
+3. ant build [This command is used to compile and generate .class files for the project]
+
+-------------------------------------------------------------------------------
+
+How to run?
+
+Execute the following command:
+java -cp ./lib/*:./bin com.lucene.myapp.LuceneApp
+
+-------------------------------------------------------------------------------
+
+Example:
+
+Execute the following commands in order:
+
+1. cd Lucene/
+2. ant clean
+3. ant build
+4. java -cp ./lib/*:./bin com.lucene.myapp.LuceneApp
+
+-------------------------------------------------------------------------------
+
+Output:
+
+output folder contains the following files:
+Q2.txt - A sorted (by frequency) list of (term, term_freq pairs)
+Q3.jpg - A plot of the resulting Zipfian curve
+
+Four lists (one per query) each containing at MOST 100 docIDs ranked by score:
+Q4a.txt - portable operating systems
+Q4b.txt - code optimization for space efficiency
+Q4c.txt - parallel algorithms
+Q4d.txt - parallel processor in information retrieval
+
+Q5.txt - A table comparing the total number of documents retrieved per query using Lucene’s scoring function vs. using your search engine (index with BM25) from the previous assignment
