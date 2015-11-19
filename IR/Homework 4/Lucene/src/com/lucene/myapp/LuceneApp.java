@@ -7,6 +7,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.jsoup.Jsoup;
 
 public class LuceneApp 
 {
@@ -52,6 +53,8 @@ public class LuceneApp
 			    {
 			    	System.out.println("Enter the search query (q=quit):");
 			    	s = br.readLine();
+			    	s = s.toLowerCase();
+			    	s = Jsoup.parse(s).text();
 			    	
 			    	if (s.equalsIgnoreCase("q")) 
 			    	{
@@ -76,7 +79,7 @@ public class LuceneApp
 			    }
 			    catch (Exception e)
 			    {
-			    	System.out.println("Error searching " + s + ": " + e.getMessage());
+			    	System.out.println("Your query contains only HTML tags. Please try again!");
 			    }
 			}
 			
