@@ -12,14 +12,20 @@ public class RetrievalEffectivenessApp
 	private static String qc19FileLocation = "files/Qc_19.txt";
 	private static Map<Integer, String> files = new LinkedHashMap<Integer, String>();
 	
+	public RetrievalEffectivenessApp()
+	{
+		files.put(12, qa12FileLocation);
+		files.put(13, qb13FileLocation);
+		files.put(19, qc19FileLocation);
+	}
+	
 	public static void main (String[] args)
 	{
 		try
 		{
+			RetrievalEffectivenessApp rea = new RetrievalEffectivenessApp();
 			FileOperations fileOperations = new FileOperations();
 			Map<Integer, Set<String>> relDocs = fileOperations.cacmRelRead(cacmRelFileLocation);
-			
-			loadQueries();
 			
 			for (Map.Entry<Integer, String> entry: files.entrySet())
 			{
@@ -35,12 +41,5 @@ public class RetrievalEffectivenessApp
 		{
 			System.out.println(e.getStackTrace());
 		}
-	}
-	
-	private static void loadQueries()
-	{
-		files.put(12, qa12FileLocation);
-		files.put(13, qb13FileLocation);
-		files.put(19, qc19FileLocation);
 	}
 }
