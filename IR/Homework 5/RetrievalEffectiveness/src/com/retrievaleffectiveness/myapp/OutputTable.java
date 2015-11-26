@@ -2,23 +2,12 @@ package com.retrievaleffectiveness.myapp;
 
 public class OutputTable 
 {
-	private int rank;
 	private String documentId;
 	private double documentScore;
 	private int relevanceLevel;
 	private double precision;
 	private double recall;
 	private double ndcg;
-	
-	public int getRank() 
-	{
-		return rank;
-	}
-	
-	public void setRank(int rank) 
-	{
-		this.rank = rank;
-	}
 	
 	public String getDocumentId() 
 	{
@@ -78,5 +67,11 @@ public class OutputTable
 	public void setNdcg(double ndcg) 
 	{
 		this.ndcg = ndcg;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return documentId + " " + documentScore + " " + relevanceLevel + " " + precision + " " + recall + " " + ndcg;
 	}
 }
