@@ -32,6 +32,10 @@ public class RetrievalEffectivenessApp
 			Map<Integer, OutputTable> qc19Documents = fileOperations.queryRead(qc19FileLocation);
 			fileOperations.generateTable(relDocs, qc19Documents, 19);
 			fileOperations.display(qc19Documents);
+			
+			System.out.println();
+			
+			System.out.println("Mean Average Precision: " + fileOperations.getMeanAvgPrecision());
 		}
 		catch (Exception e)
 		{

@@ -14,6 +14,7 @@ public class FileOperations
 	private String slash = "/";
 	private String dot = "[.]";
 	private String equal = "=";
+	private double sumAvgPrecision = 0.0;
 	
 	public Map<Integer, Set<String>> cacmRelRead(String cacmRelFileLocation) throws IOException
 	{
@@ -70,15 +71,18 @@ public class FileOperations
 	{
 		Set<String> queryRelDocs = relDocs.get(queryId);
 		int relCount = 0;
+		double sumPrecision = 0.0;
 		
 		for (Map.Entry<Integer, OutputTable> entry: documents.entrySet())
 		{
+			int flag = 0;
 			OutputTable ot = entry.getValue();
 			String documentId = ot.getDocumentId();
 			
 			if (queryRelDocs.contains(documentId))
 			{
-				++relCount;				
+				++relCount;
+				flag = 1;
 				ot.setRelevanceLevel(1);
 			}
 			else
@@ -86,9 +90,19 @@ public class FileOperations
 				ot.setRelevanceLevel(0);
 			}
 			
-			ot.setPrecision(relCount / (double) entry.getKey());
-			ot.setRecall(relCount / (double) queryRelDocs.size());
+			double precision = relCount / (double) entry.getKey();
+			ot.setPrecision(precision);
+			
+			double recall = relCount / (double) queryRelDocs.size(); 
+			ot.setRecall(recall);
+			
+			if (flag == 1)
+			{
+				sumPrecision += precision;
+			}
 		}
+		
+		sumAvgPrecision += (sumPrecision / queryRelDocs.size());
 	}
 	
 	public void display(Map<Integer, OutputTable> documents)
@@ -97,5 +111,10 @@ public class FileOperations
 		{
 			System.out.println(entry.getKey() + ". " + entry.getValue());
 		}
+	}
+	
+	public double getMeanAvgPrecision()
+	{
+		return (sumAvgPrecision / 3.0);
 	}
 }
