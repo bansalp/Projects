@@ -87,6 +87,7 @@ public class FileOperations
 			}
 			
 			ot.setPrecision(relCount / (double) entry.getKey());
+			ot.setRecall(relCount / (double) queryRelDocs.size());
 		}
 	}
 	
