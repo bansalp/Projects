@@ -12,7 +12,7 @@ public class FileOperations
 {
 	private String space = " ";
 	private String slash = "/";
-	private String dotHtml = ".html";
+	private String dot = "[.]";
 	private String equal = "=";
 	
 	public Map<Integer, Set<String>> cacmRelRead(String cacmRelFileLocation) throws IOException
@@ -55,8 +55,7 @@ public class FileOperations
 		{
 			String[] cols = line.split(space);
 			int rank = Integer.parseInt(cols[0].substring(0, cols[0].length() - 1));
-			String documentName = cols[1].split(slash)[1];
-			String documentId = documentName.split(dotHtml)[0];
+			String documentId = cols[1].split(slash)[1].split(dot)[0];
 			double documentScore = Double.parseDouble(cols[2].split(equal)[1]);
 			OutputTable ot = new OutputTable();
 			ot.setDocumentId(documentId);
