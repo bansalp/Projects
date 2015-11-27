@@ -31,9 +31,15 @@ public class RetrievalEffectivenessApp
 			{
 				Map<Integer, OutputTable> documents = fileOperations.queryRead(entry.getValue());
 				fileOperations.generateTable(relDocs, documents, entry.getKey());
-				fileOperations.calculateDiscountedGain(documents);
-				fileOperations.calculateDiscountedCumulativeGain(documents);
-				fileOperations.display(documents);
+				Map<Integer, OutputTable> documentsCopy = new LinkedHashMap<Integer, OutputTable>(documents);
+				documentsCopy = fileOperations.sortDocuments(documentsCopy);
+				fileOperations.calculateDiscountedGain(documentsCopy);
+				fileOperations.calculateDiscountedCumulativeGain(documentsCopy);
+				fileOperations.display(documentsCopy);
+				//fileOperations.calculateDiscountedGain(documents);
+				//fileOperations.calculateDiscountedCumulativeGain(documents);
+				//fileOperations.calculateNormalizedDCG(documents, documentsCopy);
+				//fileOperations.display(documents);
 				System.out.println();
 			}
 			

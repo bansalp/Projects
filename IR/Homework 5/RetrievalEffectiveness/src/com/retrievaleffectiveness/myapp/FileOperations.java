@@ -3,9 +3,14 @@ package com.retrievaleffectiveness.myapp;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public class FileOperations 
@@ -127,6 +132,7 @@ public class FileOperations
 	public void calculateDiscountedCumulativeGain(Map<Integer, OutputTable> documents)
 	{
 		int counter = 1;
+		double previousDCG = 0.0;
 		
 		for (Map.Entry<Integer, OutputTable> entry: documents.entrySet())
 		{
@@ -135,10 +141,43 @@ public class FileOperations
 			
 			if (counter >= 2)
 			{
-				discountedCumulativeGain += documents.get(counter - 1).getDcg();
+				discountedCumulativeGain += previousDCG;
 			}
 			
 			ot.setDcg(discountedCumulativeGain);
+			previousDCG = discountedCumulativeGain;
+			++counter;
+		}
+	}
+	
+	public Map<Integer, OutputTable> sortDocuments(Map<Integer, OutputTable> documents)
+	{
+		List<Map.Entry<Integer, OutputTable>> sortedEntries = new ArrayList<Map.Entry<Integer, OutputTable>>(documents.entrySet());
+		Collections.sort(sortedEntries, new Comparator<Map.Entry<Integer, OutputTable>>() {
+			@Override
+			public int compare(Map.Entry<Integer, OutputTable> e1, Map.Entry<Integer, OutputTable> e2) {
+				return e2.getValue().compareTo(e1.getValue());
+			}
+		});
+
+		Map<Integer, OutputTable> result = new LinkedHashMap<Integer, OutputTable>();
+		for (Map.Entry<Integer, OutputTable> entry : sortedEntries) {
+			result.put(entry.getKey(), entry.getValue());
+		}
+
+		return result;
+	}
+	
+	public void calculateNormalizedDCG(Map<Integer, OutputTable> documents, Map<Integer, OutputTable> documentsCopy)
+	{
+		int counter = 1;
+		
+		for (Map.Entry<Integer, OutputTable> entry: documentsCopy.entrySet())
+		{
+			OutputTable otCopy = entry.getValue();
+			OutputTable ot = documents.get(counter);
+			double ndcg = ot.getDcg() / otCopy.getDcg();
+			ot.setNdcg(ndcg);
 			++counter;
 		}
 	}

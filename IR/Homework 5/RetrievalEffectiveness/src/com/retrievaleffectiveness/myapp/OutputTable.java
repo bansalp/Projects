@@ -4,7 +4,7 @@ public class OutputTable
 {
 	private String documentId;
 	private double documentScore;
-	private int relevanceLevel;
+	private Integer relevanceLevel;
 	private double precision;
 	private double recall;
 	private double dg;
@@ -91,6 +91,11 @@ public class OutputTable
 		this.ndcg = ndcg;
 	}
 	
+	public int compareTo(OutputTable ot) 
+	{
+		return relevanceLevel.compareTo(ot.relevanceLevel);
+	}
+
 	@Override
 	public String toString()
 	{
