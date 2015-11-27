@@ -1,6 +1,8 @@
 package com.retrievaleffectiveness.myapp;
 
-public class OutputTable 
+import java.io.Serializable;
+
+public class OutputTable implements Serializable 
 {
 	private String documentId;
 	private double documentScore;
@@ -99,6 +101,6 @@ public class OutputTable
 	@Override
 	public String toString()
 	{
-		return documentId + " " + documentScore + " " + relevanceLevel + " " + precision + " " + recall + " " + dg + " " + dcg + " " + ndcg;
+		return documentId + " " + documentScore + " " + relevanceLevel + " " + precision + " " + recall + " " + ndcg;
 	}
 }

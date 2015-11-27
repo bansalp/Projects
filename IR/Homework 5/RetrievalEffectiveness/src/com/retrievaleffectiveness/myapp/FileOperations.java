@@ -1,16 +1,20 @@
 package com.retrievaleffectiveness.myapp;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 public class FileOperations 
@@ -170,16 +174,39 @@ public class FileOperations
 	
 	public void calculateNormalizedDCG(Map<Integer, OutputTable> documents, Map<Integer, OutputTable> documentsCopy)
 	{
-		int counter = 1;
+		int counter = 0;
+		List<OutputTable> docCopy = new LinkedList<OutputTable>();
 		
 		for (Map.Entry<Integer, OutputTable> entry: documentsCopy.entrySet())
 		{
-			OutputTable otCopy = entry.getValue();
-			OutputTable ot = documents.get(counter);
+			docCopy.add(entry.getValue());
+		}
+		
+		for (Map.Entry<Integer, OutputTable> entry: documents.entrySet())
+		{
+			OutputTable ot = entry.getValue();
+			OutputTable otCopy = docCopy.get(counter);
 			double ndcg = ot.getDcg() / otCopy.getDcg();
 			ot.setNdcg(ndcg);
 			++counter;
 		}
+	}
+	
+	public void serializeObject(String objectFileName, Map<Integer, OutputTable> documents) throws IOException 
+	{
+		FileOutputStream fos = new FileOutputStream(objectFileName);
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		oos.writeObject(documents);
+		oos.close();
+	}
+	
+	public Map<Integer, OutputTable> deserializeObject(String objectFileName) throws IOException, ClassNotFoundException 
+	{
+		FileInputStream fis = new FileInputStream(objectFileName);
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		Map<Integer, OutputTable> documents = (Map<Integer, OutputTable>) ois.readObject();
+		ois.close();
+		return documents;
 	}
 	
 	public void display(Map<Integer, OutputTable> documents)

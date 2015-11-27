@@ -11,6 +11,7 @@ public class RetrievalEffectivenessApp
 	private String qb13FileLocation = "files/Qb_13.txt";
 	private String qc19FileLocation = "files/Qc_19.txt";
 	private static Map<Integer, String> files = new LinkedHashMap<Integer, String>();
+	private static String objectFileName = "files/object.txt";
 	
 	public RetrievalEffectivenessApp()
 	{
@@ -31,15 +32,21 @@ public class RetrievalEffectivenessApp
 			{
 				Map<Integer, OutputTable> documents = fileOperations.queryRead(entry.getValue());
 				fileOperations.generateTable(relDocs, documents, entry.getKey());
-				Map<Integer, OutputTable> documentsCopy = new LinkedHashMap<Integer, OutputTable>(documents);
-				documentsCopy = fileOperations.sortDocuments(documentsCopy);
+				fileOperations.serializeObject(objectFileName, documents);
+				
+				Map<Integer, OutputTable> documentsCopy = fileOperations.sortDocuments(documents);
 				fileOperations.calculateDiscountedGain(documentsCopy);
 				fileOperations.calculateDiscountedCumulativeGain(documentsCopy);
-				fileOperations.display(documentsCopy);
-				//fileOperations.calculateDiscountedGain(documents);
-				//fileOperations.calculateDiscountedCumulativeGain(documents);
-				//fileOperations.calculateNormalizedDCG(documents, documentsCopy);
-				//fileOperations.display(documents);
+				
+				documents = null;
+				
+				documents = fileOperations.deserializeObject(objectFileName);
+				fileOperations.calculateDiscountedGain(documents);
+				fileOperations.calculateDiscountedCumulativeGain(documents);
+				
+				fileOperations.calculateNormalizedDCG(documents, documentsCopy);
+				
+				fileOperations.display(documents);
 				System.out.println();
 			}
 			
