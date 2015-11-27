@@ -7,9 +7,9 @@ import java.util.Set;
 public class RetrievalEffectivenessApp 
 {
 	private static String cacmRelFileLocation = "files/cacm.rel";
-	private static String qa12FileLocation = "files/Qa_12.txt";
-	private static String qb13FileLocation = "files/Qb_13.txt";
-	private static String qc19FileLocation = "files/Qc_19.txt";
+	private String qa12FileLocation = "files/Qa_12.txt";
+	private String qb13FileLocation = "files/Qb_13.txt";
+	private String qc19FileLocation = "files/Qc_19.txt";
 	private static Map<Integer, String> files = new LinkedHashMap<Integer, String>();
 	
 	public RetrievalEffectivenessApp()
@@ -31,11 +31,13 @@ public class RetrievalEffectivenessApp
 			{
 				Map<Integer, OutputTable> documents = fileOperations.queryRead(entry.getValue());
 				fileOperations.generateTable(relDocs, documents, entry.getKey());
+				fileOperations.calculateDiscountedGain(documents);
+				fileOperations.calculateDiscountedCumulativeGain(documents);
 				fileOperations.display(documents);
 				System.out.println();
 			}
 			
-			System.out.println("Mean Average Precision: " + fileOperations.getMeanAvgPrecision());
+			System.out.println("Mean Average Precision: " + fileOperations.getMeanAvgPrecision(files.size()));
 		}
 		catch (Exception e)
 		{

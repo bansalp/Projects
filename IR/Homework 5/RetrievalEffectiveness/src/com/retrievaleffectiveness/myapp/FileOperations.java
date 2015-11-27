@@ -105,6 +105,44 @@ public class FileOperations
 		sumAvgPrecision += (sumPrecision / queryRelDocs.size());
 	}
 	
+	public void calculateDiscountedGain(Map<Integer, OutputTable> documents)
+	{
+		int counter = 1;
+		
+		for (Map.Entry<Integer, OutputTable> entry: documents.entrySet())
+		{
+			OutputTable ot = entry.getValue();
+			double discountedGain = ot.getRelevanceLevel();
+			
+			if (counter >= 2)
+			{
+				discountedGain /= log2(counter);
+			}
+			
+			ot.setDg(discountedGain);
+			++counter;
+		}
+	}
+	
+	public void calculateDiscountedCumulativeGain(Map<Integer, OutputTable> documents)
+	{
+		int counter = 1;
+		
+		for (Map.Entry<Integer, OutputTable> entry: documents.entrySet())
+		{
+			OutputTable ot = entry.getValue();
+			double discountedCumulativeGain = ot.getDg();
+			
+			if (counter >= 2)
+			{
+				discountedCumulativeGain += documents.get(counter - 1).getDcg();
+			}
+			
+			ot.setDcg(discountedCumulativeGain);
+			++counter;
+		}
+	}
+	
 	public void display(Map<Integer, OutputTable> documents)
 	{
 		for (Map.Entry<Integer, OutputTable> entry: documents.entrySet())
@@ -113,8 +151,18 @@ public class FileOperations
 		}
 	}
 	
-	public double getMeanAvgPrecision()
+	public double getMeanAvgPrecision(int size)
 	{
-		return (sumAvgPrecision / 3.0);
+		return (sumAvgPrecision / size);
+	}
+	
+	public double logb(double a, double b)
+	{
+		return Math.log(a) / Math.log(b);
+	}
+
+	public double log2(double a)
+	{
+		return logb(a, 2);
 	}
 }

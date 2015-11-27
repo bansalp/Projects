@@ -7,6 +7,8 @@ public class OutputTable
 	private int relevanceLevel;
 	private double precision;
 	private double recall;
+	private double dg;
+	private double dcg;
 	private double ndcg;
 	
 	public String getDocumentId() 
@@ -59,6 +61,26 @@ public class OutputTable
 		this.recall = recall;
 	}
 	
+	public double getDg() 
+	{
+		return dg;
+	}
+
+	public void setDg(double dg) 
+	{
+		this.dg = dg;
+	}
+
+	public double getDcg() 
+	{
+		return dcg;
+	}
+
+	public void setDcg(double dcg) 
+	{
+		this.dcg = dcg;
+	}
+	
 	public double getNdcg() 
 	{
 		return ndcg;
@@ -72,6 +94,6 @@ public class OutputTable
 	@Override
 	public String toString()
 	{
-		return documentId + " " + documentScore + " " + relevanceLevel + " " + precision + " " + recall + " " + ndcg;
+		return documentId + " " + documentScore + " " + relevanceLevel + " " + precision + " " + recall + " " + dg + " " + dcg + " " + ndcg;
 	}
 }
