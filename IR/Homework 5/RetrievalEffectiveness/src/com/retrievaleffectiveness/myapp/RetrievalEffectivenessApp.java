@@ -32,6 +32,9 @@ public class RetrievalEffectivenessApp
 			{
 				Map<Integer, OutputTable> documents = fileOperations.queryRead(entry.getValue());
 				fileOperations.generateTable(relDocs, documents, entry.getKey());
+				fileOperations.calculateDiscountedGain(documents);
+				fileOperations.calculateDiscountedCumulativeGain(documents);
+				
 				fileOperations.serializeObject(objectFileName, documents);
 				
 				Map<Integer, OutputTable> documentsCopy = fileOperations.sortDocuments(documents);
@@ -39,10 +42,7 @@ public class RetrievalEffectivenessApp
 				fileOperations.calculateDiscountedCumulativeGain(documentsCopy);
 				
 				documents = null;
-				
 				documents = fileOperations.deserializeObject(objectFileName);
-				fileOperations.calculateDiscountedGain(documents);
-				fileOperations.calculateDiscountedCumulativeGain(documents);
 				
 				fileOperations.calculateNormalizedDCG(documents, documentsCopy);
 				
