@@ -1,0 +1,30 @@
+How to compile?
+
+Execute the following commands in order:
+1. cd RetrievalEffectiveness/ [This command is used to set present working directory to RetrievalEffectiveness folder]
+2. ant clean [This command is used to clean previously generated .class files]
+3. ant build [This command is used to compile and generate .class files for the project]
+
+-------------------------------------------------------------------------------
+
+How to run?
+
+Execute the following command:
+java -cp ./bin com.retrievaleffectiveness.myapp.RetrievalEffectivenessApp
+
+-------------------------------------------------------------------------------
+
+Example:
+
+Execute the following commands in order:
+
+1. cd RetrievalEffectiveness/
+2. ant clean
+3. ant build
+4. java -cp ./bin com.retrievaleffectiveness.myapp.RetrievalEffectivenessApp
+
+-------------------------------------------------------------------------------
+
+Output:
+
+output.txt file contains all the deliverables as required by the question.

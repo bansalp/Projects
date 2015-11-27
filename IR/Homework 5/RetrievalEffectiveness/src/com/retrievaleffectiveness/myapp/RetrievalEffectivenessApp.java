@@ -46,7 +46,12 @@ public class RetrievalEffectivenessApp
 				
 				fileOperations.calculateNormalizedDCG(documents, documentsCopy);
 				
+				System.out.println("Q_ID: " + entry.getKey());
+				System.out.println();
 				fileOperations.display(documents);
+				System.out.println();
+				System.out.println("P@20: " + documents.get(20).getPrecision());
+				System.out.println();
 				System.out.println();
 			}
 			
