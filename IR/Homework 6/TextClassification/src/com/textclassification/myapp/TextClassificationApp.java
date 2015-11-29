@@ -1,6 +1,5 @@
 package com.textclassification.myapp;
 
-import weka.classifiers.Classifier;
 import weka.classifiers.bayes.NaiveBayes;
 
 public class TextClassificationApp 
@@ -14,7 +13,7 @@ public class TextClassificationApp
 		generateARFF.addInstance("      is a Parth Parth worse boy \n", "negative");
 		generateARFF.addInstance("Parth is a smart boy", "positive");
 		
-		Classifier cModel = (Classifier) new NaiveBayes();
+		NaiveBayes cModel = new NaiveBayes();
 		cModel.buildClassifier(generateARFF.getFilteredInstances());
 		System.out.println(cModel);
 	}
