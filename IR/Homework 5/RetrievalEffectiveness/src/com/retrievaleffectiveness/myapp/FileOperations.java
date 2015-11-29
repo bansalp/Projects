@@ -22,12 +22,13 @@ public class FileOperations
 	private String space = " ";
 	private String slash = "/";
 	private String dot = "[.]";
+	private String hypen = "-";
 	private String equal = "=";
 	private double sumAvgPrecision = 0.0;
 	
-	public Map<Integer, Set<String>> cacmRelRead(String cacmRelFileLocation) throws IOException
+	public Map<Integer, Set<Integer>> cacmRelRead(String cacmRelFileLocation) throws IOException
 	{
-		Map<Integer, Set<String>> relDocs = new LinkedHashMap<Integer, Set<String>>();
+		Map<Integer, Set<Integer>> relDocs = new LinkedHashMap<Integer, Set<Integer>>();
 		String line = null;
 		FileReader fr = new FileReader(cacmRelFileLocation);
 		BufferedReader br = new BufferedReader(fr);
@@ -36,17 +37,17 @@ public class FileOperations
 		{
 			String[] cols = line.split(space);
 			int queryId = Integer.parseInt(cols[0]);
-			String documentId = cols[2];
+			String documentId = cols[2].split(hypen)[1];
 			
 			if (relDocs.containsKey(queryId))
 			{
-				Set<String> docIds = relDocs.get(queryId);
-				docIds.add(documentId);
+				Set<Integer> docIds = relDocs.get(queryId);
+				docIds.add(Integer.parseInt(documentId));
 			}
 			else
 			{
-				Set<String> docId = new HashSet<String>();
-				docId.add(documentId);
+				Set<Integer> docId = new HashSet<Integer>();
+				docId.add(Integer.parseInt(documentId));
 				relDocs.put(queryId, docId);
 			}
 		}
@@ -65,10 +66,10 @@ public class FileOperations
 		{
 			String[] cols = line.split(space);
 			int rank = Integer.parseInt(cols[0].substring(0, cols[0].length() - 1));
-			String documentId = cols[1].split(slash)[1].split(dot)[0];
+			String documentId = cols[1].split(slash)[1].split(dot)[0].split(hypen)[1];
 			double documentScore = Double.parseDouble(cols[2].split(equal)[1]);
 			OutputTable ot = new OutputTable();
-			ot.setDocumentId(documentId);
+			ot.setDocumentId(Integer.parseInt(documentId));
 			ot.setDocumentScore(documentScore);
 			documents.put(rank, ot);
 		}
@@ -76,9 +77,9 @@ public class FileOperations
 		return documents;
 	}
 	
-	public void generateTable(Map<Integer, Set<String>> relDocs, Map<Integer, OutputTable> documents, int queryId)
+	public void generateTable(Map<Integer, Set<Integer>> relDocs, Map<Integer, OutputTable> documents, int queryId)
 	{
-		Set<String> queryRelDocs = relDocs.get(queryId);
+		Set<Integer> queryRelDocs = relDocs.get(queryId);
 		int relCount = 0;
 		double sumPrecision = 0.0;
 		
@@ -86,7 +87,7 @@ public class FileOperations
 		{
 			int flag = 0;
 			OutputTable ot = entry.getValue();
-			String documentId = ot.getDocumentId();
+			int documentId = ot.getDocumentId();
 			
 			if (queryRelDocs.contains(documentId))
 			{

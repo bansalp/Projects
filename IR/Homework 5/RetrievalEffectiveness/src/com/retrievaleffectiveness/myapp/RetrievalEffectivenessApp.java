@@ -26,7 +26,7 @@ public class RetrievalEffectivenessApp
 		{
 			RetrievalEffectivenessApp rea = new RetrievalEffectivenessApp();
 			FileOperations fileOperations = new FileOperations();
-			Map<Integer, Set<String>> relDocs = fileOperations.cacmRelRead(cacmRelFileLocation);
+			Map<Integer, Set<Integer>> relDocs = fileOperations.cacmRelRead(cacmRelFileLocation);
 			
 			for (Map.Entry<Integer, String> entry: files.entrySet())
 			{

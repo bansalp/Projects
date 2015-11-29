@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class OutputTable implements Serializable 
 {
-	private String documentId;
+	private int documentId;
 	private double documentScore;
 	private Integer relevanceLevel;
 	private double precision;
@@ -13,12 +13,12 @@ public class OutputTable implements Serializable
 	private double dcg;
 	private double ndcg;
 	
-	public String getDocumentId() 
+	public int getDocumentId() 
 	{
 		return documentId;
 	}
 	
-	public void setDocumentId(String documentId) 
+	public void setDocumentId(int documentId) 
 	{
 		this.documentId = documentId;
 	}
