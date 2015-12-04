@@ -115,6 +115,15 @@ public class FileOperations
 		sumAvgPrecision += (sumPrecision / queryRelDocs.size());
 	}
 	
+	public void updateRelevance(Map<Integer, OutputTable> documentsCopy, int relCounter) 
+	{
+		for (int i = 1; i <= relCounter; i++)
+		{
+			OutputTable ot = documentsCopy.get(i);
+			ot.setRelevanceLevel(1);
+		}
+	}
+	
 	public void calculateDiscountedGain(Map<Integer, OutputTable> documents)
 	{
 		int counter = 1;

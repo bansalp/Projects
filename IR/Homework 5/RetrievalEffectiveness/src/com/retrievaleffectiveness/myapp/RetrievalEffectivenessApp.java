@@ -38,6 +38,7 @@ public class RetrievalEffectivenessApp
 				fileOperations.serializeObject(objectFileName, documents);
 				
 				Map<Integer, OutputTable> documentsCopy = fileOperations.sortDocuments(documents);
+				fileOperations.updateRelevance(documentsCopy, relDocs.get(entry.getKey()).size());
 				fileOperations.calculateDiscountedGain(documentsCopy);
 				fileOperations.calculateDiscountedCumulativeGain(documentsCopy);
 				
