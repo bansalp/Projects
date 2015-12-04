@@ -117,10 +117,20 @@ public class FileOperations
 	
 	public void updateRelevance(Map<Integer, OutputTable> documentsCopy, int relCounter) 
 	{
-		for (int i = 1; i <= relCounter; i++)
+		int counter = 1;
+		
+		for (int i: documentsCopy.keySet())
 		{
-			OutputTable ot = documentsCopy.get(i);
-			ot.setRelevanceLevel(1);
+			if (counter <= relCounter)
+			{
+				OutputTable ot = documentsCopy.get(i);
+				ot.setRelevanceLevel(1);
+				counter++;
+			}			
+			else
+			{
+				break;
+			}
 		}
 	}
 	
